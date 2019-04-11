@@ -1,0 +1,21 @@
+MODULE main
+VAR
+balance_updated: boolean;
+balance_amount: { greater_equal, less_than };
+ASSIGN
+init ( balance_amount ):= greater_equal;
+next ( balance_amount ):= 
+case
+	balance_amount = greater_equal : less_than;
+	balance_amount = greater_equal : greater_equal;
+	balance_amount = less_than : less_than;
+	TRUE : { greater_equal, less_than };
+esac;
+init ( balance_updated ):= TRUE;
+
+-- It should never be the case that balance_amount = greater_equal and balance_updated = FALSE.
+SPEC AG ! (balance_amount = greater_equal & balance_updated = FALSE)
+-- It should never be the case that balance_amount = less_than and balance_updated = FALSE.
+SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
+-- Each occurrence of condition balance_updated = FALSE is followed by and occurrence of condition balance_updated = TRUE.
+SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
