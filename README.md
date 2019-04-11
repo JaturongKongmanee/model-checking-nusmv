@@ -5,16 +5,16 @@ To use NuSMV for model checking.
 ## The main purpose of a model checker
 * To **verify** that a system model **satisfies** a set of desired properties **(property specification)**.
 * **Inputs:** 
-* 1. **System Model** represented by **FSMs**.
-* 2. **Property Specification** represented by **Temporal Logics**: Computational Tree Logic (CTL), Linear Temporal Logic (LTL).
+	- **System Model** represented by **FSMs**.
+	- **Property Specification** represented by **Temporal Logics**: Computational Tree Logic (CTL), Linear Temporal Logic (LTL).
 * **Output:**
-* 1. Fail: **counterexample** is generated.
-* 2. Pass: No sequence of states that lead to an error has found.
+	- Fail: **counterexample** is generated.
+	- Pass: No sequence of states that lead to an error has found.
 * **Data types of ***state variable*** in the language**:
-* 1. **booleans**: e.g., request: boolean;
-* 2. **scalars**: e.g., state: {ready, busy};
-* 3. **fixed arrays**: e.g., arr: array 0..3 of {red, green, blue};
-* 4. **bounded integers(intervals)**: e.g., n: 1..8;
+	- **booleans**: e.g., request: boolean;
+	- **scalars**: e.g., state: {ready, busy};
+	- **fixed arrays**: e.g., arr: array 0..3 of {red, green, blue};
+	- **bounded integers(intervals)**: e.g., n: 1..8;
 * **NOTE!** The **space of states** of the FSM is determined by the **declarations of state variables**.
 
 
