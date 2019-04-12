@@ -254,6 +254,60 @@ SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
+### Result of example 5
+```
+-- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
+-- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample
+Trace Type: Counterexample
+-> State: 1.1 <-
+  balance_updated = TRUE
+  balance_amount = greater_equal
+-> State: 1.2 <-
+  balance_updated = FALSE
+  balance_amount = less_than
+-- specification AG (balance_updated = FALSE -> AF balance_updated = TRUE)  is true
+```
+
+### Example 6
+```
+MODULE main
+VAR
+balance_updated: boolean;
+balance_amount: { greater_equal, less_than };
+ASSIGN
+init ( balance_amount ):= greater_equal;
+next ( balance_amount ):= 
+case
+	balance_amount = greater_equal & balance_updated = TRUE : less_than;
+	balance_amount = greater_equal & balance_updated = TRUE : greater_equal;
+	balance_amount = less_than & balance_updated = TRUE : less_than;
+	TRUE : { greater_equal, less_than };
+esac;
+init ( balance_updated ):= TRUE;
+next ( balance_updated ):=
+case
+	balance_updated = TRUE & balance_amount = greater_equal : TRUE;
+	balance_updated = TRUE & balance_amount = less_than : TRUE;
+	TRUE : {TRUE, FALSE};
+esac;
+
+-- It should never be the case that balance_amount = greater_equal and balance_updated = FALSE.
+SPEC AG ! (balance_amount = greater_equal & balance_updated = FALSE)
+-- It should never be the case that balance_amount = less_than and balance_updated = FALSE.
+SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
+-- Each occurrence of condition balance_updated = FALSE is followed by an occurrence of condition balance_updated = TRUE.
+SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
+```
+
+### Result of example 6
+```
+-- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
+-- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is true
+-- specification AG (balance_updated = FALSE -> AF balance_updated = TRUE)  is true
+```
+
 ## References
 * http://nusmv.fbk.eu/NuSMV/userman/v21/nusmv_2.html
 * http://nusmv.fbk.eu/NuSMV/tutorial/v25/tutorial.pdf
