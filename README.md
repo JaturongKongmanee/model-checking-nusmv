@@ -28,7 +28,7 @@ NuSMV filename.smv
 ```
 ### To create **.smv file** in Windows
 ```
-open con filename.smv
+copy con filename.smv
 ```
 * Enter the system model and property specification.
 * **ctrl-z** then **enter** to exit and save
@@ -60,7 +60,7 @@ esac;
 SPEC AG ! (balance_amount = greater_equal & balance_updated = FALSE)
 -- It should never be the case that balance_amount = less_than and balance_updated = FALSE.
 SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
--- Each occurrence of condition balance_updated = FALSE is followed by and occurrence of condition balance_updated = TRUE.
+-- Each occurrence of condition balance_updated = FALSE is followed by an occurrence of condition balance_updated = TRUE.
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 ### Result of example 1
@@ -91,7 +91,7 @@ init ( balance_updated ):= TRUE;
 SPEC AG ! (balance_amount = greater_equal & balance_updated = FALSE)
 -- It should never be the case that balance_amount = less_than and balance_updated = FALSE.
 SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
--- Each occurrence of condition balance_updated = FALSE is followed by and occurrence of condition balance_updated = TRUE.
+-- Each occurrence of condition balance_updated = FALSE is followed by an occurrence of condition balance_updated = TRUE.
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
@@ -148,7 +148,7 @@ esac;
 SPEC AG ! (balance_amount = greater_equal & balance_updated = FALSE)
 -- It should never be the case that balance_amount = less_than and balance_updated = FALSE.
 SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
--- Each occurrence of condition balance_updated = FALSE is followed by and occurrence of condition balance_updated = TRUE.
+-- Each occurrence of condition balance_updated = FALSE is followed by an occurrence of condition balance_updated = TRUE.
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
@@ -202,7 +202,7 @@ esac;
 SPEC AG ! (balance_amount = greater_equal & balance_updated = FALSE)
 -- It should never be the case that balance_amount = less_than and balance_updated = FALSE.
 SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
--- Each occurrence of condition balance_updated = FALSE is followed by and occurrence of condition balance_updated = TRUE.
+-- Each occurrence of condition balance_updated = FALSE is followed by an occurrence of condition balance_updated = TRUE.
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
@@ -220,6 +220,38 @@ Trace Type: Counterexample
   balance_updated = FALSE
   balance_amount = less_than
 -- specification AG (balance_updated = FALSE -> AF balance_updated = TRUE)  is true
+```
+
+
+### Example 5
+```
+MODULE main
+VAR
+balance_updated: boolean;
+balance_amount: { greater_equal, less_than };
+ASSIGN
+init ( balance_amount ):= greater_equal;
+next ( balance_amount ):= 
+case
+	balance_amount = greater_equal & balance_updated = TRUE : less_than;
+	balance_amount = greater_equal & balance_updated = TRUE : greater_equal;
+	balance_amount = less_than & balance_updated = TRUE : less_than;
+	TRUE : { greater_equal, less_than };
+esac;
+init ( balance_updated ):= TRUE;
+next ( balance_updated ):=
+case
+	balance_updated = FALSE & balance_amount = greater_equal : TRUE;
+	balance_updated = FALSE & balance_amount = less_than : TRUE;
+	TRUE : {TRUE, FALSE};
+esac;
+
+-- It should never be the case that balance_amount = greater_equal and balance_updated = FALSE.
+SPEC AG ! (balance_amount = greater_equal & balance_updated = FALSE)
+-- It should never be the case that balance_amount = less_than and balance_updated = FALSE.
+SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
+-- Each occurrence of condition balance_updated = FALSE is followed by an occurrence of condition balance_updated = TRUE.
+SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
 ## References
