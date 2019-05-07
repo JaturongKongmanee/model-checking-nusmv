@@ -34,7 +34,7 @@ copy con filename.smv
 * **ctrl-z** then **enter** to exit and save
 
 ### Example 1
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -64,14 +64,14 @@ SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 ### Result of example 1
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is true
 -- specification AG (balance_updated = FALSE -> AF balance_updated = TRUE)  is true
 ```
 
 ### Example 2
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -96,7 +96,7 @@ SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
 ### Result of example 2
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is false
 -- as demonstrated by the following execution sequence
@@ -124,7 +124,7 @@ Trace Type: Counterexample
 ```
 
 ### Example 3
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -153,7 +153,7 @@ SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
 ### Result of example 3
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is false
 -- as demonstrated by the following execution sequence
 Trace Description: CTL Counterexample
@@ -177,7 +177,7 @@ Trace Type: Counterexample
 ```
 
 ### Example 4
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -207,7 +207,7 @@ SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
 ### Result of example 4
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is false
 -- as demonstrated by the following execution sequence
@@ -224,7 +224,7 @@ Trace Type: Counterexample
 
 
 ### Example 5
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -255,7 +255,7 @@ SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
 ### Result of example 5
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is false
 -- as demonstrated by the following execution sequence
@@ -271,7 +271,7 @@ Trace Type: Counterexample
 ```
 
 ### Example 6
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -302,14 +302,14 @@ SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
 ### Result of example 6
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is true
 -- specification AG (balance_updated = FALSE -> AF balance_updated = TRUE)  is true
 ```
 
 ### Example 7
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -339,14 +339,14 @@ SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 ### Result of example 7
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is true
 -- specification AG (balance_updated = FALSE -> AF balance_updated = TRUE)  is true
 ```
 
 ### Example 8
-```
+```javascript
 MODULE main
 VAR
 balance_updated: boolean;
@@ -376,7 +376,7 @@ SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
 
 ### Result of example 8
-```
+```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is false
 -- as demonstrated by the following execution sequence
