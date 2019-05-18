@@ -522,6 +522,39 @@ LTLSPEC
 -- specification  F balance > 0  is true
 ```
 
+### Example 11
+```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { A_min, A_pls, idle };
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 5;
+next (status) :=
+case 
+	(status = idle | status = A_min) & balance > 0 : A_min;
+	status = idle | status =  A_pls : A_pls;
+	(status = A_min | status = A_pls) & balance = balance : idle;
+esac;
+next (accumulated_amount) :=
+case
+	(status = idle | status = A_min) & balance > 0 : (accumulated_amount + 1) mod 5;
+	status = idle | status =  A_pls : (accumulated_amount + 1) mod 5;
+	(status = A_min | status = A_pls) & balance = balance : 0;
+esac;
+next (balance) :=
+case
+	status = A_min & balance = balance : (balance - accumulated_amount) mod 10;
+	status = A_pls & balance = balance : (balance + accumulated_amount) mod 10;
+	TRUE: balance;
+esac;
+LTLSPEC
+	F balance > 0;
+```
+
 ## References
 * http://nusmv.fbk.eu/NuSMV/userman/v21/nusmv_2.html
 * http://nusmv.fbk.eu/NuSMV/tutorial/v25/tutorial.pdf
