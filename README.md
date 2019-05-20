@@ -555,6 +555,320 @@ LTLSPEC
 	F balance > 0;
 ```
 
+### Example 12
+```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { A_min, idle };
+action: { withdraw, update };
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 3;
+next (status) :=
+case
+	status = idle & action = withdraw : A_min;	
+	status = A_min & action = withdraw : A_min;	
+	status = A_min & action = update : idle;
+	TRUE : status;
+esac;
+next (accumulated_amount) :=
+case
+	status = idle & action = withdraw : (accumulated_amount + 1) mod 5;
+	status = A_min & action = withdraw : (accumulated_amount + 1) mod 5;	
+	status = A_min & action = update : 0;	
+	TRUE : accumulated_amount;
+esac;
+next (balance) :=
+case
+	status = idle & action = withdraw : balance;
+	status = A_min & action = withdraw : balance;
+	status = A_min & action = update : (balance - accumulated_amount) mod 10;	
+	TRUE : balance;
+esac;
+LTLSPEC
+	F ( G status = idle & balance > 0);
+```
+
+### Result of example 12
+```javascript
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 3
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.2 <-
+      balance = 3
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.3 <-
+      balance = 2
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.4 <-
+      balance = 2
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.5 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.6 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+      action = withdraw
+-> State: 1.7 <-
+      balance = 1
+      accumulated_amount = 2
+      status = A_min
+      action = update
+-> State: 1.8 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.9 <-
+      balance = -1
+      accumulated_amount = 1
+      status = A_min
+      action = withdraw
+-> State: 1.10 <-
+      balance = -1
+      accumulated_amount = 2
+      status = A_min
+      action = withdraw
+-> State: 1.11 <-
+      balance = -1
+      accumulated_amount = 3
+      status = A_min
+      action = withdraw
+-> State: 1.12 <-
+      balance = -1
+      accumulated_amount = 4
+      status = A_min
+      action = update
+-> State: 1.13 <-
+      balance = -5
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.14 <-
+      balance = -5
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.15 <-
+      balance = -6
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.16 <-
+      balance = -6
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.17 <-
+      balance = -7
+      accumulated_amount = 0
+      status = idle
+      action = update
+```
+
+### Example 13
+```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { A_min, idle };
+action: { withdraw, update };
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 3;
+next (status) :=
+case
+	status = idle & action = withdraw & balance > 0 : A_min;	
+	status = A_min & action = withdraw & balance > 0 : A_min;	
+	status = A_min & action = update : idle;
+	TRUE : status;
+esac;
+next (accumulated_amount) :=
+case
+	status = idle & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;
+	status = A_min & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;	
+	status = A_min & action = update : 0;	
+	TRUE : accumulated_amount;
+esac;
+next (balance) :=
+case
+	status = idle & action = withdraw : balance;
+	status = A_min & action = withdraw : balance;
+	status = A_min & action = update : (balance - accumulated_amount) mod 10;	
+	TRUE : balance;
+esac;
+LTLSPEC
+	F ( G status = idle & balance > 0);
+```
+
+### Result of example 13
+```javascript
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 3
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.2 <-
+      balance = 3
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.3 <-
+      balance = 2
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.4 <-
+      balance = 2
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.5 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.6 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+      action = withdraw
+-> State: 1.7 <-
+      balance = 1
+      accumulated_amount = 2
+      status = A_min
+      action = update
+-> State: 1.8 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.9 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+```
+
+
+### Example 14
+```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { A_min, idle };
+action: { withdraw, update };
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 3;
+next (status) :=
+case
+	status = idle & action = withdraw & balance >= accumulated_amount : A_min;	
+	status = A_min & action = withdraw & balance >= accumulated_amount : A_min;	
+	status = A_min & action = update : idle;
+	TRUE : status;
+esac;
+next (accumulated_amount) :=
+case
+	status = idle & action = withdraw & balance >= accumulated_amount : (accumulated_amount + 1) mod 5;
+	status = A_min & action = withdraw & balance >= accumulated_amount : (accumulated_amount + 1) mod 5;	
+	status = A_min & action = update : 0;	
+	TRUE : accumulated_amount;
+esac;
+next (balance) :=
+case
+	status = idle & action = withdraw : balance;
+	status = A_min & action = withdraw : balance;
+	status = A_min & action = update : (balance - accumulated_amount) mod 10;	
+	TRUE : balance;
+esac;
+LTLSPEC
+	F ( G status = idle & balance > 0);
+```
+### Result of example 14
+```javascript
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 3
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.2 <-
+      balance = 3
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.3 <-
+      balance = 2
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.4 <-
+      balance = 2
+      accumulated_amount = 1
+      status = A_min
+      action = update
+-> State: 1.5 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.6 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+      action = withdraw
+-> State: 1.7 <-
+      balance = 1
+      accumulated_amount = 2
+      status = A_min
+      action = update
+-> State: 1.8 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.9 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.10 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+-> State: 1.11 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+      action = withdraw
+```
+
 ## References
 * http://nusmv.fbk.eu/NuSMV/userman/v21/nusmv_2.html
 * http://nusmv.fbk.eu/NuSMV/tutorial/v25/tutorial.pdf
