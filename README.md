@@ -139,8 +139,9 @@ SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 
 <!--##############################################################################################-->
 
-
-### Example 8
+<details>
+  <summary><b>Example 3</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -169,8 +170,13 @@ SPEC AG ! (balance_amount = less_than & balance_updated = FALSE)
 -- Each occurrence of condition balance_updated = FALSE is followed by an occurrence of condition balance_updated = TRUE.
 SPEC AG ( balance_updated = FALSE -> AF balance_updated = TRUE)
 ```
+</details>
 
-### Result of example 8
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Result of example 3</b></summary>
+  
 ```javascript
 -- specification AG !(balance_amount = greater_equal & balance_updated = FALSE)  is true
 -- specification AG !(balance_amount = less_than & balance_updated = FALSE)  is false
@@ -185,9 +191,14 @@ Trace Type: Counterexample
   balance_amount = less_than
 -- specification AG (balance_updated = FALSE -> AF balance_updated = TRUE)  is true
 ```
+</details>
+
+<!--##############################################################################################-->
 
 
-### Example 9
+<details>
+  <summary><b>Example 4</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -219,9 +230,13 @@ esac;
 LTLSPEC
 	F balance > 0;
 ```
+</details>
 
+<!--##############################################################################################-->
 
-### Result of example 9
+<details>
+  <summary><b>Result of example 4</b></summary>
+  
 ```javascript
 -- specification  F balance > 0  is false
 -- as demonstrated by the following execution sequence
@@ -266,9 +281,14 @@ Trace Type: Counterexample
   balance = 0
   accumulated_amount = 2
 ```
+</details>
+
+<!--##############################################################################################-->
 
 
-### Example 10
+<details>
+  <summary><b>Example 5</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -300,47 +320,24 @@ esac;
 LTLSPEC
 	F balance > 0;
 ```
+</details>
 
+<!--##############################################################################################-->
 
-### Result of example 10
+<details>
+  <summary><b>Result of example 5</b></summary>
+  
 ```javascript
 -- specification  F balance > 0  is true
 ```
+</details>
 
-### Example 11
-```javascript
-MODULE main
-VAR
-balance: -10..10;
-accumulated_amount: 0..5;
-status: { A_min, A_pls, idle };
-ASSIGN
-init (status) := idle;
-init (accumulated_amount) := 0;
-init (balance) := 5;
-next (status) :=
-case 
-	(status = idle | status = A_min) & balance > 0 : A_min;
-	status = idle | status =  A_pls : A_pls;
-	(status = A_min | status = A_pls) & balance = balance : idle;
-esac;
-next (accumulated_amount) :=
-case
-	(status = idle | status = A_min) & balance > 0 : (accumulated_amount + 1) mod 5;
-	status = idle | status =  A_pls : (accumulated_amount + 1) mod 5;
-	(status = A_min | status = A_pls) & balance = balance : 0;
-esac;
-next (balance) :=
-case
-	status = A_min & balance = balance : (balance - accumulated_amount) mod 10;
-	status = A_pls & balance = balance : (balance + accumulated_amount) mod 10;
-	TRUE: balance;
-esac;
-LTLSPEC
-	F balance > 0;
-```
+<!--##############################################################################################-->
 
-### Example 12
+
+<details>
+  <summary><b>Example 6</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -376,8 +373,13 @@ esac;
 LTLSPEC
 	F ( G status = idle & balance > 0);
 ```
+</details>
 
-### Result of example 12
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Result of example 6</b></summary>
+  
 ```javascript
 Trace Description: Simulation Trace
 Trace Type: Simulation
@@ -467,8 +469,14 @@ Trace Type: Simulation
       status = idle
       action = update
 ```
+</details>
 
-### Example 13
+<!--##############################################################################################-->
+
+
+<details>
+  <summary><b>Example 7</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -504,8 +512,13 @@ esac;
 LTLSPEC
 	F ( G status = idle & balance > 0);
 ```
+</details>
 
-### Result of example 13
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Result of example 7</b></summary>
+  
 ```javascript
 Trace Description: Simulation Trace
 Trace Type: Simulation
@@ -555,9 +568,14 @@ Trace Type: Simulation
       status = idle
       action = withdraw
 ```
+</details>
+
+<!--##############################################################################################-->
 
 
-### Example 14
+<details>
+  <summary><b>Example 8</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -593,7 +611,13 @@ esac;
 LTLSPEC
 	F ( G status = idle & balance > 0);
 ```
-### Result of example 14
+</details>
+
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Result of example 8</b></summary>
+  
 ```javascript
 Trace Description: Simulation Trace
 Trace Type: Simulation
@@ -653,8 +677,15 @@ Trace Type: Simulation
       status = idle
       action = withdraw
 ```
+</details>
 
-### Example 15
+<!--##############################################################################################-->
+
+
+
+<details>
+  <summary><b>Example 9</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -698,9 +729,13 @@ LTLSPEC
 	F ( G status = idle & balance > 0);
 
 ```
+</details>
 
+<!--##############################################################################################-->
 
-### Result of example 15
+<details>
+  <summary><b>Result of example 9</b></summary>
+  
 ```javascript
 Trace Description: Simulation Trace
 Trace Type: Simulation
@@ -1025,8 +1060,14 @@ Trace Type: Simulation
       status = idle
       action = update
 ```
+</details>
 
-### Example 16
+<!--##############################################################################################-->
+
+
+<details>
+  <summary><b>Example 10</b></summary>
+  
 ```javascript
 MODULE main
 VAR
@@ -1069,8 +1110,13 @@ esac;
 LTLSPEC
 	F ( G status = idle & balance > 0);
 ```
+</details>
 
-### Result of example 16 (Finalized)
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Result of example 10 (finalized)</b></summary>
+  
 ```javascript
 Trace Description: Simulation Trace
 Trace Type: Simulation
@@ -1234,8 +1280,13 @@ Trace Type: Simulation
       status = idle
       action = update
 ```
+</details>
 
-### Result of example 16
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Result of example 10</b></summary>
+  
 ```javascript
 Trace Description: Simulation Trace
 Trace Type: Simulation
@@ -1840,6 +1891,10 @@ Trace Type: Simulation
       status = A_pls
       action = update
 ```
+</details>
+
+<!--##############################################################################################-->
+
 
 ## References
 * http://nusmv.fbk.eu/NuSMV/userman/v21/nusmv_2.html
