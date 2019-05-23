@@ -41,7 +41,8 @@ copy con filename.smv
 * Enter the system model and property specification.
 * **ctrl-z** then **enter** to exit and save
 
-<!--##############################################################################################-->
+
+## Example and Result
 
 <details>
   <summary><b>Example 1</b></summary>
