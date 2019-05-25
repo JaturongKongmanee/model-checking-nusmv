@@ -41,8 +41,181 @@ copy con filename.smv
 * Enter the system model and property specification.
 * **ctrl-z** then **enter** to exit and save
 
+### To run NuSMV interactively
+```javascript
+NuSMV -int filename.smv
+go
+pick_state -r
+simulate -i -k 5
+show_traces -v
+```
+
 
 ## Example and Result
+
+<details>
+  <summary><b>Model 1</b></summary>
+  
+ ```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { A_min, A_pls, idle };
+
+IVAR
+action: { withdraw, update, deposit };
+
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 3;
+next (status) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : A_min;		
+	(status = A_min | status = A_pls) & action = update : idle;
+	(status = idle | status = A_pls) & action = deposit : A_pls;		
+	TRUE : status;
+esac;
+next (accumulated_amount) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;	
+	(status = A_min | status = A_pls) & action = update : 0;	
+	(status = idle | status = A_pls) & action = deposit : (accumulated_amount + 1) mod 5;	
+	TRUE : accumulated_amount;
+esac;
+next (balance) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : balance;
+	status = A_pls & action = update : (balance + accumulated_amount) mod 10;
+	status = A_min & action = update : (balance - accumulated_amount) mod 10;
+	(status = idle | status = A_pls) & action = deposit : balance;	
+	TRUE : balance;
+esac;
+LTLSPEC
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+<details>
+  <summary><b>Model 1: Scenario 1</b></summary>
+  
+ ```javascript
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Model 1: Scenario 2</b></summary>
+  
+ ```javascript
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Model 1: Scenario 3</b></summary>
+  
+ ```javascript
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+
+
+
+
+<details>
+  <summary><b>Model 2</b></summary>
+  
+ ```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { A_min, A_pls, idle };
+
+IVAR
+action: { withdraw, update, deposit };
+
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 3;
+next (status) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : A_min;		
+	(status = A_min | status = A_pls) & action = update : idle;
+	(status = idle | status = A_pls) & action = deposit : A_pls;		
+	TRUE : status;
+esac;
+next (accumulated_amount) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;	
+	(status = A_min | status = A_pls) & action = update : 0;	
+	(status = idle | status = A_pls) & action = deposit : (accumulated_amount + 1) mod 5;	
+	TRUE : accumulated_amount;
+esac;
+next (balance) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : balance;
+	status = A_pls & action = update : (balance + accumulated_amount) mod 10;
+	status = A_min & action = update : (balance - accumulated_amount) mod 10;
+	(status = idle | status = A_pls) & action = deposit : balance;	
+	TRUE : balance;
+esac;
+LTLSPEC
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+<details>
+  <summary><b>Model 2: Scenario 1</b></summary>
+  
+ ```javascript
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Model 2: Scenario 2</b></summary>
+  
+ ```javascript
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Model 2: Scenario 3</b></summary>
+  
+ ```javascript
+	G balance > 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+
+
+
 
 <details>
   <summary><b>Example 1</b></summary>
