@@ -17,7 +17,7 @@ To use NuSMV for model checking.
 	- **bounded integers(intervals)**: e.g., n: 1..8;
 	<br/>
 * **NOTE!** The **space of states** of the FSM is determined by the **declarations of state variables**.<br/>
-[state space is the cartesian product of ranges of state variables.]
+[state space is the [cartesian product](http://web.mnstate.edu/peil/MDEV102/U1/S7/Cartesian4.htm) of ranges of state variables.]
 
 
 ## An SMV program consists of:
