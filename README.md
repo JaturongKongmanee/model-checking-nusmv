@@ -69,7 +69,7 @@ action: { withdraw, update, deposit };
 ASSIGN
 init (status) := idle;
 init (accumulated_amount) := 0;
-init (balance) := 3;
+init (balance) := 0;
 next (status) :=
 case
 	(status = idle | status = A_min) & action = withdraw & balance > 0 : A_min;		
@@ -104,7 +104,63 @@ LTLSPEC
   <summary><b>Model 1: Scenario 1</b></summary>
   
  ```javascript
-	G balance > 0;
+- deposit
+- deposit
+- deposit
+- update
+- withdraw
+- withdraw
+- update
+
+
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.2 <-
+      action = deposit
+-> State: 1.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.3 <-
+      action = deposit
+-> State: 1.3 <-
+      balance = 0
+      accumulated_amount = 2
+      status = A_pls
+-> Input: 1.4 <-
+      action = deposit
+-> State: 1.4 <-
+      balance = 0
+      accumulated_amount = 3
+      status = A_pls
+-> Input: 1.5 <-
+      action = update
+-> State: 1.5 <-
+      balance = 3
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.6 <-
+      action = withdraw
+-> State: 1.6 <-
+      balance = 3
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.7 <-
+      action = withdraw
+-> State: 1.7 <-
+      balance = 3
+      accumulated_amount = 2
+      status = A_min
+-> Input: 1.8 <-
+      action = update
+-> State: 1.8 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
 ```
 </details>
 
@@ -114,7 +170,76 @@ LTLSPEC
   <summary><b>Model 1: Scenario 2</b></summary>
   
  ```javascript
-	G balance > 0;
+ - deposit
+ - update
+ - withdraw
+ - withdraw
+ - withdraw
+ - withdraw
+ - update
+ - withdraw
+ 
+ 
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.2 <-
+      action = deposit
+-> State: 1.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.3 <-
+      action = update
+-> State: 1.3 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.4 <-
+      action = withdraw
+-> State: 1.4 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.5 <-
+      action = withdraw
+-> State: 1.5 <-
+      balance = 1
+      accumulated_amount = 2
+      status = A_min
+-> Input: 1.6 <-
+      action = withdraw
+-> State: 1.6 <-
+      balance = 1
+      accumulated_amount = 3
+      status = A_min
+-> Input: 1.7 <-
+      action = withdraw
+-> State: 1.7 <-
+      balance = 1
+      accumulated_amount = 4
+      status = A_min
+-> Input: 1.8 <-
+      action = update
+-> State: 1.8 <-
+      balance = -3
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.9 <-
+      action = withdraw
+-> State: 1.9 <-
+      balance = -3
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.10 <-
+      action = withdraw
+-> State: 1.10 <-
+      balance = -3
+      accumulated_amount = 0
+      status = idle
 ```
 </details>
 
@@ -124,7 +249,69 @@ LTLSPEC
   <summary><b>Model 1: Scenario 3</b></summary>
   
  ```javascript
-	G balance > 0;
+- deposit
+- update
+- withdraw
+- update
+- withdraw
+- update
+- withdraw
+- update
+
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.2 <-
+      action = deposit
+-> State: 1.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.3 <-
+      action = update
+-> State: 1.3 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.4 <-
+      action = withdraw
+-> State: 1.4 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.5 <-
+      action = update
+-> State: 1.5 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.6 <-
+      action = withdraw
+-> State: 1.6 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.7 <-
+      action = update
+-> State: 1.7 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.8 <-
+      action = withdraw
+-> State: 1.8 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.9 <-
+      action = update
+-> State: 1.9 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
 ```
 </details>
 
@@ -151,27 +338,27 @@ action: { withdraw, update, deposit };
 ASSIGN
 init (status) := idle;
 init (accumulated_amount) := 0;
-init (balance) := 3;
+init (balance) := 0;
 next (status) :=
 case
-	(status = idle | status = A_min) & action = withdraw & balance > 0 : A_min;		
-	(status = A_min | status = A_pls) & action = update : idle;
-	(status = idle | status = A_pls) & action = deposit : A_pls;		
+	status = idle & action = withdraw & balance > 0 : A_min;
+	status = idle & action = deposit : A_pls;		
+	(status = A_min | status = A_pls) & action = update : idle;	
 	TRUE : status;
 esac;
 next (accumulated_amount) :=
 case
-	(status = idle | status = A_min) & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;	
-	(status = A_min | status = A_pls) & action = update : 0;	
-	(status = idle | status = A_pls) & action = deposit : (accumulated_amount + 1) mod 5;	
+	status = idle & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;
+	status = idle & action = deposit : (accumulated_amount + 1) mod 5;		
+	(status = A_min | status = A_pls) & action = update : 0;
 	TRUE : accumulated_amount;
 esac;
 next (balance) :=
 case
-	(status = idle | status = A_min) & action = withdraw & balance > 0 : balance;
+	status = idle & action = withdraw & balance > 0 : balance;
+	status = idle & action = deposit : balance;		
 	status = A_pls & action = update : (balance + accumulated_amount) mod 10;
 	status = A_min & action = update : (balance - accumulated_amount) mod 10;
-	(status = idle | status = A_pls) & action = deposit : balance;	
 	TRUE : balance;
 esac;
 LTLSPEC
@@ -186,7 +373,80 @@ LTLSPEC
   <summary><b>Model 2: Scenario 1</b></summary>
   
  ```javascript
-	G balance > 0;
+- deposit
+- deposit
+- deposit
+- update
+- withdraw
+- withdraw
+- update
+
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.2 <-
+      action = deposit
+-> State: 1.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.3 <-
+      action = deposit
+-> State: 1.3 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.4 <-
+      action = deposit
+-> State: 1.4 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.5 <-
+      action = update
+-> State: 1.5 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.6 <-
+      action = withdraw
+-> State: 1.6 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.7 <-
+      action = withdraw
+-> State: 1.7 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.8 <-
+      action = update
+-> State: 1.8 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.9 <-
+      action = update
+-> State: 1.9 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.10 <-
+      action = update
+-> State: 1.10 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.11 <-
+      action = update
+-> State: 1.11 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
 ```
 </details>
 
@@ -196,7 +456,82 @@ LTLSPEC
   <summary><b>Model 2: Scenario 2</b></summary>
   
  ```javascript
-	G balance > 0;
+ - deposit
+ - update
+ - withdraw
+ - withdraw
+ - withdraw
+ - withdraw
+ - update
+ - withdraw
+ 
+
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.2 <-
+      action = deposit
+-> State: 1.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.3 <-
+      action = update
+-> State: 1.3 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.4 <-
+      action = withdraw
+-> State: 1.4 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.5 <-
+      action = withdraw
+-> State: 1.5 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.6 <-
+      action = withdraw
+-> State: 1.6 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.7 <-
+      action = withdraw
+-> State: 1.7 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.8 <-
+      action = update
+-> State: 1.8 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.9 <-
+      action = withdraw
+-> State: 1.9 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.10 <-
+      action = update
+-> State: 1.10 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.11 <-
+      action = update
+-> State: 1.11 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
 ```
 </details>
 
@@ -206,7 +541,69 @@ LTLSPEC
   <summary><b>Model 2: Scenario 3</b></summary>
   
  ```javascript
-	G balance > 0;
+- deposit
+- update
+- withdraw
+- update
+- withdraw
+- update
+- withdraw
+- update
+
+Trace Description: Simulation Trace
+Trace Type: Simulation
+-> State: 1.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.2 <-
+      action = deposit
+-> State: 1.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 1.3 <-
+      action = update
+-> State: 1.3 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.4 <-
+      action = withdraw
+-> State: 1.4 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 1.5 <-
+      action = update
+-> State: 1.5 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.6 <-
+      action = withdraw
+-> State: 1.6 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.7 <-
+      action = update
+-> State: 1.7 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.8 <-
+      action = withdraw
+-> State: 1.8 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 1.9 <-
+      action = update
+-> State: 1.9 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
 ```
 </details>
 
