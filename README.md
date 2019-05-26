@@ -2475,3 +2475,4 @@ Trace Type: Simulation
 * http://twiki.di.uniroma1.it/pub/MFS/WebHome/MF2.pdf
 * http://ce.sharif.edu/courses/92-93/2/ce665-1/resources/root/NuSMV_Resources/A%20Simple%20Tutorial%20on%20NuSMV_Slides.pdf
 * http://disi.unitn.it/~agiordani/fm/L5/main.pdf
+* [NuSMV: a new symbolic model checker](http://www.cs.cmu.edu/~emc/papers/Papers%20In%20Refereed%20Journals/NuSMV-ANewSymbolicModelChecker.pdf)
