@@ -571,7 +571,7 @@ case
 	TRUE : balance;
 esac;
 LTLSPEC
-	G balance > 0;
+	G balance >= 0;
 ```
 </details>
 
@@ -801,7 +801,7 @@ Trace Type: Simulation
 
 
 <details>
-  <summary><b>Model 2</b></summary>
+  <summary><b>Model 2: no counterexamle --> fix requirement(s) and remove all CE below</b></summary>
   
  ```javascript
 MODULE main
@@ -840,7 +840,7 @@ case
 	TRUE : balance;
 esac;
 LTLSPEC
-	G balance > 0;
+	G balance >= 0;
 ```
 </details>
 
