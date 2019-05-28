@@ -49,9 +49,487 @@ pick_state -r
 simulate -i -k 5
 show_traces -v
 ```
+### To check requirement(s) - find a counterexample
+```javascript
+NuSMV -int filename.smv
+go
+pick_state
+check_ltlspec -p "G(balance>=0)"
+show_traces -v
+```
 
 
 ## Example and Result
+
+
+<details>
+  <summary><b>Final Model</b></summary>
+  
+ ```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { A_min, A_pls, idle };
+
+IVAR
+action: { withdraw, update, deposit };
+
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 0;
+next (status) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : A_min;		
+	(status = A_min | status = A_pls) & action = update : idle;
+	(status = idle | status = A_pls) & action = deposit : A_pls;		
+	TRUE : status;
+esac;
+next (accumulated_amount) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;	
+	(status = A_min | status = A_pls) & action = update : 0;	
+	(status = idle | status = A_pls) & action = deposit : (accumulated_amount + 1) mod 5;	
+	TRUE : accumulated_amount;
+esac;
+next (balance) :=
+case
+	(status = idle | status = A_min) & action = withdraw & balance > 0 : balance;
+	status = A_pls & action = update : (balance + accumulated_amount) mod 10;
+	status = A_min & action = update : (balance - accumulated_amount) mod 10;
+	(status = idle | status = A_pls) & action = deposit : balance;	
+	TRUE : balance;
+esac;
+LTLSPEC
+	G balance >= 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Counter Example 1</b></summary>
+  
+ ```javascript
+NuSMV > check_ltlspec -p "G(balance>=0)"
+-- specification  G balance >= 0  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+  balance = 0
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.2 <-
+  action = deposit
+-> State: 2.2 <-
+  accumulated_amount = 1
+  status = A_pls
+-> Input: 2.3 <-
+  action = update
+-> State: 2.3 <-
+  balance = 1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.4 <-
+  action = withdraw
+-> State: 2.4 <-
+  accumulated_amount = 1
+  status = A_min
+-> Input: 2.5 <-
+-> State: 2.5 <-
+  accumulated_amount = 2
+-> Input: 2.6 <-
+  action = update
+-> State: 2.6 <-
+  balance = -1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.7 <-
+  action = deposit
+-> State: 2.7 <-
+  accumulated_amount = 1
+  status = A_pls
+-> Input: 2.8 <-
+  action = update
+-> State: 2.8 <-
+  balance = 0
+  accumulated_amount = 0
+  status = idle
+  
+  
+  
+  
+<!-- ################### Trace number: 2 ################### -->
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.2 <-
+      action = deposit
+-> State: 2.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 2.3 <-
+      action = update
+-> State: 2.3 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.4 <-
+      action = withdraw
+-> State: 2.4 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 2.5 <-
+      action = withdraw
+-> State: 2.5 <-
+      balance = 1
+      accumulated_amount = 2
+      status = A_min
+-> Input: 2.6 <-
+      action = update
+-> State: 2.6 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.7 <-
+      action = deposit
+-> State: 2.7 <-
+      balance = -1
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 2.8 <-
+      action = update
+-> State: 2.8 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+```
+</details>
+
+<!--##############################################################################################-->
+
+<details>
+  <summary><b>Counter Example 2</b></summary>
+  
+ ```javascript
+NuSMV > check_ltlspec -p "G(balance>=0)"
+-- specification  G balance >= 0  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+  balance = 2
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.2 <-
+  action = withdraw
+-> State: 2.2 <-
+  accumulated_amount = 1
+  status = A_min
+-> Input: 2.3 <-
+-> State: 2.3 <-
+  accumulated_amount = 2
+-> Input: 2.4 <-
+-> State: 2.4 <-
+  accumulated_amount = 3
+-> Input: 2.5 <-
+  action = update
+-> State: 2.5 <-
+  balance = -1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.6 <-
+  action = deposit
+-> State: 2.6 <-
+  accumulated_amount = 1
+  status = A_pls
+-> Input: 2.7 <-
+-> State: 2.7 <-
+  accumulated_amount = 2
+-> Input: 2.8 <-
+-> State: 2.8 <-
+  accumulated_amount = 3
+-> Input: 2.9 <-
+  action = update
+-> State: 2.9 <-
+  balance = 2
+  accumulated_amount = 0
+  status = idle
+  
+  
+  
+  
+  
+<!-- ################### Trace number: 2 ################### -->
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+      balance = 2
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.2 <-
+      action = withdraw
+-> State: 2.2 <-
+      balance = 2
+      accumulated_amount = 1
+      status = A_min
+-> Input: 2.3 <-
+      action = withdraw
+-> State: 2.3 <-
+      balance = 2
+      accumulated_amount = 2
+      status = A_min
+-> Input: 2.4 <-
+      action = withdraw
+-> State: 2.4 <-
+      balance = 2
+      accumulated_amount = 3
+      status = A_min
+-> Input: 2.5 <-
+      action = update
+-> State: 2.5 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.6 <-
+      action = deposit
+-> State: 2.6 <-
+      balance = -1
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 2.7 <-
+      action = deposit
+-> State: 2.7 <-
+      balance = -1
+      accumulated_amount = 2
+      status = A_pls
+-> Input: 2.8 <-
+      action = deposit
+-> State: 2.8 <-
+      balance = -1
+      accumulated_amount = 3
+      status = A_pls
+-> Input: 2.9 <-
+      action = update
+-> State: 2.9 <-
+      balance = 2
+      accumulated_amount = 0
+      status = idle
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+
+<details>
+  <summary><b>Counter Example 3</b></summary>
+  
+ ```javascript
+NuSMV > check_ltlspec -p "G(balance>=0)"
+-- specification  G balance >= 0  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+  balance = 5
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.2 <-
+  action = withdraw
+-> State: 2.2 <-
+  accumulated_amount = 1
+  status = A_min
+-> Input: 2.3 <-
+-> State: 2.3 <-
+  accumulated_amount = 2
+-> Input: 2.4 <-
+-> State: 2.4 <-
+  accumulated_amount = 3
+-> Input: 2.5 <-
+-> State: 2.5 <-
+  accumulated_amount = 4
+-> Input: 2.6 <-
+  action = update
+-> State: 2.6 <-
+  balance = 1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.7 <-
+  action = withdraw
+-> State: 2.7 <-
+  accumulated_amount = 1
+  status = A_min
+-> Input: 2.8 <-
+-> State: 2.8 <-
+  accumulated_amount = 2
+-> Input: 2.9 <-
+  action = update
+-> State: 2.9 <-
+  balance = -1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.10 <-
+  action = deposit
+-> State: 2.10 <-
+  accumulated_amount = 1
+  status = A_pls
+-> Input: 2.11 <-
+-> State: 2.11 <-
+  accumulated_amount = 2
+-> Input: 2.12 <-
+  action = update
+-> State: 2.12 <-
+  balance = 1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.13 <-
+  action = deposit
+-> State: 2.13 <-
+  accumulated_amount = 1
+  status = A_pls
+-> Input: 2.14 <-
+-> State: 2.14 <-
+  accumulated_amount = 2
+-> Input: 2.15 <-
+-> State: 2.15 <-
+  accumulated_amount = 3
+-> Input: 2.16 <-
+-> State: 2.16 <-
+  accumulated_amount = 4
+-> Input: 2.17 <-
+  action = update
+-> State: 2.17 <-
+  balance = 5
+  accumulated_amount = 0
+  status = idle
+  
+  
+  
+ 
+<!-- ################### Trace number: 2 ################### -->
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+      balance = 5
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.2 <-
+      action = withdraw
+-> State: 2.2 <-
+      balance = 5
+      accumulated_amount = 1
+      status = A_min
+-> Input: 2.3 <-
+      action = withdraw
+-> State: 2.3 <-
+      balance = 5
+      accumulated_amount = 2
+      status = A_min
+-> Input: 2.4 <-
+      action = withdraw
+-> State: 2.4 <-
+      balance = 5
+      accumulated_amount = 3
+      status = A_min
+-> Input: 2.5 <-
+      action = withdraw
+-> State: 2.5 <-
+      balance = 5
+      accumulated_amount = 4
+      status = A_min
+-> Input: 2.6 <-
+      action = update
+-> State: 2.6 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.7 <-
+      action = withdraw
+-> State: 2.7 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_min
+-> Input: 2.8 <-
+      action = withdraw
+-> State: 2.8 <-
+      balance = 1
+      accumulated_amount = 2
+      status = A_min
+-> Input: 2.9 <-
+      action = update
+-> State: 2.9 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.10 <-
+      action = deposit
+-> State: 2.10 <-
+      balance = -1
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 2.11 <-
+      action = deposit
+-> State: 2.11 <-
+      balance = -1
+      accumulated_amount = 2
+      status = A_pls
+-> Input: 2.12 <-
+      action = update
+-> State: 2.12 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.13 <-
+      action = deposit
+-> State: 2.13 <-
+      balance = 1
+      accumulated_amount = 1
+      status = A_pls
+-> Input: 2.14 <-
+      action = deposit
+-> State: 2.14 <-
+      balance = 1
+      accumulated_amount = 2
+      status = A_pls
+-> Input: 2.15 <-
+      action = deposit
+-> State: 2.15 <-
+      balance = 1
+      accumulated_amount = 3
+      status = A_pls
+-> Input: 2.16 <-
+      action = deposit
+-> State: 2.16 <-
+      balance = 1
+      accumulated_amount = 4
+      status = A_pls
+-> Input: 2.17 <-
+      action = update
+-> State: 2.17 <-
+      balance = 5
+      accumulated_amount = 0
+      status = idle
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+
 
 <details>
   <summary><b>Model 1</b></summary>
@@ -2476,3 +2954,5 @@ Trace Type: Simulation
 * http://ce.sharif.edu/courses/92-93/2/ce665-1/resources/root/NuSMV_Resources/A%20Simple%20Tutorial%20on%20NuSMV_Slides.pdf
 * http://disi.unitn.it/~agiordani/fm/L5/main.pdf
 * [NuSMV: a new symbolic model checker](http://www.cs.cmu.edu/~emc/papers/Papers%20In%20Refereed%20Journals/NuSMV-ANewSymbolicModelChecker.pdf)
+* https://www.cl.cam.ac.uk/teaching/1617/HLog+ModC/slides/lecture-9-4up.pdf
+* http://www.tcs.hut.fi/Studies/T-79.5001/reports/laht08simcex.pdf
