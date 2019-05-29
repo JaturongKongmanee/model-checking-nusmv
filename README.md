@@ -60,18 +60,19 @@ show_traces -v
 
 ### A simple bank contract in Solidity
 ```javascript
-contract MyBank {
-   mapping (address ⇒ uint) balances;
-   function Deposit() {
+pragma solidity >=0.4.22 <0.6.0;
+contract Bank {
+   mapping (address ⇒ uint8) balances;
+   function deposit() {
       balances[msg.sender] += msg.value;
    }
-   function Withdraw(uint amount) {
-      if(balances[msg.sender] ≥ amount) {
-         msg.sender.call.value(amount)();
-	 balances[msg.sender] −= amount;
+   function withdraw(uint8 _amount) {
+      if(balances[msg.sender] ≥ _amount) {
+         msg.sender.call.value(_amount)();
+	 balances[msg.sender] −= _amount;
       }
    }
-   function Balance() constant returns(uint) {
+   function balance() constant returns(uint8) {
       return balances[msg.sender];
    }
 }
