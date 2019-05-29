@@ -63,7 +63,7 @@ show_traces -v
 
 
 <details>
-  <summary><b>Final Model</b></summary>
+  <summary><b>Final Model used in the paper</b></summary>
   
  ```javascript
 MODULE main
@@ -532,7 +532,7 @@ Trace Type: Counterexample
 
 
 <details>
-  <summary><b>Model 1</b></summary>
+  <summary><b>Unsafe Model</b></summary>
   
  ```javascript
 MODULE main
@@ -801,7 +801,7 @@ Trace Type: Simulation
 
 
 <details>
-  <summary><b>Model 2: no counterexamle --> fix requirement(s) and remove all CE below</b></summary>
+  <summary><b>Safe Model : no counterexamle</b></summary>
   
  ```javascript
 MODULE main
@@ -844,251 +844,8 @@ LTLSPEC
 ```
 </details>
 
-<!--##############################################################################################-->
-
-
-<details>
-  <summary><b>Model 2: Scenario 1</b></summary>
-  
- ```javascript
-- deposit
-- deposit
-- deposit
-- update
-- withdraw
-- withdraw
-- update
-
-Trace Description: Simulation Trace
-Trace Type: Simulation
--> State: 1.1 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.2 <-
-      action = deposit
--> State: 1.2 <-
-      balance = 0
-      accumulated_amount = 1
-      status = A_pls
--> Input: 1.3 <-
-      action = deposit
--> State: 1.3 <-
-      balance = 0
-      accumulated_amount = 1
-      status = A_pls
--> Input: 1.4 <-
-      action = deposit
--> State: 1.4 <-
-      balance = 0
-      accumulated_amount = 1
-      status = A_pls
--> Input: 1.5 <-
-      action = update
--> State: 1.5 <-
-      balance = 1
-      accumulated_amount = 0
-      status = idle
--> Input: 1.6 <-
-      action = withdraw
--> State: 1.6 <-
-      balance = 1
-      accumulated_amount = 1
-      status = A_min
--> Input: 1.7 <-
-      action = withdraw
--> State: 1.7 <-
-      balance = 1
-      accumulated_amount = 1
-      status = A_min
--> Input: 1.8 <-
-      action = update
--> State: 1.8 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.9 <-
-      action = update
--> State: 1.9 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.10 <-
-      action = update
--> State: 1.10 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.11 <-
-      action = update
--> State: 1.11 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
-```
-</details>
 
 <!--##############################################################################################-->
-
-<details>
-  <summary><b>Model 2: Scenario 2</b></summary>
-  
- ```javascript
- - deposit
- - update
- - withdraw
- - withdraw
- - withdraw
- - withdraw
- - update
- - withdraw
- 
-
-Trace Description: Simulation Trace
-Trace Type: Simulation
--> State: 1.1 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.2 <-
-      action = deposit
--> State: 1.2 <-
-      balance = 0
-      accumulated_amount = 1
-      status = A_pls
--> Input: 1.3 <-
-      action = update
--> State: 1.3 <-
-      balance = 1
-      accumulated_amount = 0
-      status = idle
--> Input: 1.4 <-
-      action = withdraw
--> State: 1.4 <-
-      balance = 1
-      accumulated_amount = 1
-      status = A_min
--> Input: 1.5 <-
-      action = withdraw
--> State: 1.5 <-
-      balance = 1
-      accumulated_amount = 1
-      status = A_min
--> Input: 1.6 <-
-      action = withdraw
--> State: 1.6 <-
-      balance = 1
-      accumulated_amount = 1
-      status = A_min
--> Input: 1.7 <-
-      action = withdraw
--> State: 1.7 <-
-      balance = 1
-      accumulated_amount = 1
-      status = A_min
--> Input: 1.8 <-
-      action = update
--> State: 1.8 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.9 <-
-      action = withdraw
--> State: 1.9 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.10 <-
-      action = update
--> State: 1.10 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.11 <-
-      action = update
--> State: 1.11 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
-```
-</details>
-
-<!--##############################################################################################-->
-
-<details>
-  <summary><b>Model 2: Scenario 3</b></summary>
-  
- ```javascript
-- deposit
-- update
-- withdraw
-- update
-- withdraw
-- update
-- withdraw
-- update
-
-Trace Description: Simulation Trace
-Trace Type: Simulation
--> State: 1.1 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.2 <-
-      action = deposit
--> State: 1.2 <-
-      balance = 0
-      accumulated_amount = 1
-      status = A_pls
--> Input: 1.3 <-
-      action = update
--> State: 1.3 <-
-      balance = 1
-      accumulated_amount = 0
-      status = idle
--> Input: 1.4 <-
-      action = withdraw
--> State: 1.4 <-
-      balance = 1
-      accumulated_amount = 1
-      status = A_min
--> Input: 1.5 <-
-      action = update
--> State: 1.5 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.6 <-
-      action = withdraw
--> State: 1.6 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.7 <-
-      action = update
--> State: 1.7 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.8 <-
-      action = withdraw
--> State: 1.8 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
--> Input: 1.9 <-
-      action = update
--> State: 1.9 <-
-      balance = 0
-      accumulated_amount = 0
-      status = idle
-```
-</details>
-
-<!--##############################################################################################-->
-
-
-
 
 
 
