@@ -58,6 +58,25 @@ check_ltlspec -p "G(balance>=0)"
 show_traces -v
 ```
 
+### A simple bank contract in Solidity
+```javascript
+contract MyBank {
+   mapping (address ⇒ uint) balances;
+   function Deposit() {
+      balances[msg.sender] += msg.value;
+   }
+   function Withdraw(uint amount) {
+      if(balances[msg.sender] ≥ amount) {
+         msg.sender.call.value(amount)();
+	 balances[msg.sender] −= amount;
+      }
+   }
+   function Balance() constant returns(uint) {
+      return balances[msg.sender];
+   }
+}
+```
+
 
 ## Example and Result
 
