@@ -1,15 +1,30 @@
 # NuSMV Model Checker
 ## Introduction
-To use NuSMV for model checking.
+* **Formal Verification** is the act of proving or disproving the correctness of intended algorithms underlying a system with respect to a certain formal specification or property, using formal methods of mathematics.
+* **Model checking** is one approach of formal verification.
 
-## The main purpose of a model checker
-* To **verify** that a system model **satisfies** a set of desired properties **(property specification)**.
+### The main purpose of a model checking
+* To automatically **verify** that a system model behavior **satisfies** a set of desired properties **(property specification)**.
 * **Inputs:** 
 	- **System Model** represented by **FSMs**.
-	- **Property Specification** represented by **Temporal Logics**: Computational Tree Logic (CTL), Linear Temporal Logic (LTL).
+	- **Property Specification** represented by:
+		- **Temporal Logics:**
+			- Computational Tree Logic (CTL)
+			- Linear Temporal Logic (LTL).
+		- first-order logic
+		- failure-divergence (FDR2)
 * **Output:**
 	- Fail: **counterexample** is generated.
 	- Pass: No sequence of states that lead to an error has found.
+
+## NuSMV
+NuSMV is a **symbolic model checking**, but also support **bounded model checking.**
+### Using NuSMV model checker consists of:
+* Declarations of the **state variables** (state variables determine state space of model).
+* Assignments that define the valid initial states.
+* Assignments that define the transition relation.
+
+### Data types
 * **Data types of ***state variable*** in the language**:
 	- **booleans**: e.g., request: boolean;
 	- **scalars**: e.g., state: {ready, busy};
@@ -19,11 +34,12 @@ To use NuSMV for model checking.
 * **NOTE!** The **space of states** of the FSM is determined by the **declarations of state variables**.<br/>
 [state space is the [cartesian product](http://web.mnstate.edu/peil/MDEV102/U1/S7/Cartesian4.htm) of ranges of state variables.]
 
+### Specification
+* Specification in NuSMV is expressed in **temporal logics.**
 
-## An SMV program consists of:
-* Declarations of the **state variables** (state variables determine state space of model).
-* Assignments that define the valid initial states.
-* Assignments that define the transition relation.
+### Approach
+* NuSMV supports both **binary decision diagrams(BDDs)** and **SAT** approaches.
+
 
 
 ## Getting Started
@@ -49,7 +65,7 @@ pick_state -r
 simulate -i -k 5
 show_traces -v
 ```
-### To check requirement(s) - find a counterexample
+### To check property(s) - find a counterexample
 ```javascript
 NuSMV -int filename.smv
 go
