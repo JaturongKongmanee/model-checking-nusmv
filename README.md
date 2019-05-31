@@ -9,8 +9,8 @@
 	- **System Model** represented by **FSMs**.
 	- **Property Specification** represented by:
 		- **Temporal Logics:**
-			- Computational Tree Logic (CTL)
-			- Linear Temporal Logic (LTL).
+			- Computational Tree Logic (**CTL**)
+			- Linear Temporal Logic (**LTL**).
 		- first-order logic
 		- failure-divergence (FDR2)
 * **Output:**
