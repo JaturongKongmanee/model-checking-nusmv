@@ -2749,3 +2749,5 @@ Trace Type: Simulation
 * [NuSMV: a new symbolic model checker](http://www.cs.cmu.edu/~emc/papers/Papers%20In%20Refereed%20Journals/NuSMV-ANewSymbolicModelChecker.pdf)
 * https://www.cl.cam.ac.uk/teaching/1617/HLog+ModC/slides/lecture-9-4up.pdf
 * http://www.tcs.hut.fi/Studies/T-79.5001/reports/laht08simcex.pdf
+* [Bounded Model Checking](http://www.cs.cmu.edu/~emc/papers/Books%20and%20Edited%20Volumes/Bounded%20Model%20Checking.pdf)
+* [Symbolic Model Checking without BDDs*](https://link.springer.com/content/pdf/10.1007/3-540-49059-0_14.pdf)
