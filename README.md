@@ -97,9 +97,270 @@ contract Bank {
 
 ## Example and Result
 
-
 <details>
   <summary><b>Final Model used in the paper</b></summary>
+  
+ ```javascript
+MODULE main
+VAR
+balance: -10..10;
+accumulated_amount: 0..5;
+status: { min, pls, idle };
+
+IVAR
+action: { withdraw, update, deposit };
+
+ASSIGN
+init (status) := idle;
+init (accumulated_amount) := 0;
+init (balance) := 0;
+next (status) :=
+case
+   (status = idle | status = min) & action = withdraw & balance > 0 : min;		
+   (status = min | status = pls) & action = update : idle;
+   status = idle & action = deposit : pls;		
+   TRUE : status;
+esac;
+next (accumulated_amount) :=
+case
+   (status = idle | status = min) & action = withdraw & balance > 0 : (accumulated_amount + 1) mod 5;	
+   (status = min | status = pls) & action = update : 0;	
+   status = idle & action = deposit : (accumulated_amount + 1) mod 5;	
+   TRUE : accumulated_amount;
+esac;
+next (balance) :=
+case
+   (status = idle | status = min) & action = withdraw & balance > 0 : balance;
+   status = pls & action = update : (balance + accumulated_amount) mod 10;
+   status = min & action = update : (balance - accumulated_amount) mod 10;
+   status = idle & action = deposit : balance;	
+   TRUE : balance;
+esac;
+LTLSPEC
+   G balance >= 0;
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+<details>
+  <summary><b>Counter Example 1</b></summary>
+  
+ ```javascript
+NuSMV > check_ltlspec -p "G(balance>=0)"
+-- specification  G balance >= 0  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+  balance = 0
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.2 <-
+  action = deposit
+-> State: 2.2 <-
+  accumulated_amount = 1
+  status = pls
+-> Input: 2.3 <-
+  action = update
+-> State: 2.3 <-
+  balance = 1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.4 <-
+  action = withdraw
+-> State: 2.4 <-
+  accumulated_amount = 1
+  status = min
+-> Input: 2.5 <-
+-> State: 2.5 <-
+  accumulated_amount = 2
+-> Input: 2.6 <-
+  action = update
+-> State: 2.6 <-
+  balance = -1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.7 <-
+  action = deposit
+-> State: 2.7 <-
+  accumulated_amount = 1
+  status = pls
+-> Input: 2.8 <-
+  action = update
+-> State: 2.8 <-
+  balance = 0
+  accumulated_amount = 0
+  status = idle
+  
+<!-- ################### Trace number: 2 ################### -->
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.2 <-
+      action = deposit
+-> State: 2.2 <-
+      balance = 0
+      accumulated_amount = 1
+      status = pls
+-> Input: 2.3 <-
+      action = update
+-> State: 2.3 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.4 <-
+      action = withdraw
+-> State: 2.4 <-
+      balance = 1
+      accumulated_amount = 1
+      status = min
+-> Input: 2.5 <-
+      action = withdraw
+-> State: 2.5 <-
+      balance = 1
+      accumulated_amount = 2
+      status = min
+-> Input: 2.6 <-
+      action = update
+-> State: 2.6 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.7 <-
+      action = deposit
+-> State: 2.7 <-
+      balance = -1
+      accumulated_amount = 1
+      status = pls
+-> Input: 2.8 <-
+      action = update
+-> State: 2.8 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+<details>
+  <summary><b>Counter Example 2</b></summary>
+  
+ ```javascript
+NuSMV > check_ltlspec -p "G(balance>=0)"
+-- specification  G balance >= 0  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+  balance = 1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.2 <-
+  action = withdraw
+-> State: 2.2 <-
+  accumulated_amount = 1
+  status = min
+-> Input: 2.3 <-
+-> State: 2.3 <-
+  accumulated_amount = 2
+-> Input: 2.4 <-
+  action = update
+-> State: 2.4 <-
+  balance = -1
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.5 <-
+  action = deposit
+-> State: 2.5 <-
+  accumulated_amount = 1
+  status = pls
+-> Input: 2.6 <-
+  action = update
+-> State: 2.6 <-
+  balance = 0
+  accumulated_amount = 0
+  status = idle
+-> Input: 2.7 <-
+  action = deposit
+-> State: 2.7 <-
+  accumulated_amount = 1
+  status = pls
+-> Input: 2.8 <-
+  action = update
+-> State: 2.8 <-
+  balance = 1
+  accumulated_amount = 0
+  status = idle
+  
+<!-- ################### Trace number: 2 ################### -->
+Trace Description: LTL Counterexample
+Trace Type: Counterexample
+-- Loop starts here
+-> State: 2.1 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.2 <-
+      action = withdraw
+-> State: 2.2 <-
+      balance = 1
+      accumulated_amount = 1
+      status = min
+-> Input: 2.3 <-
+      action = withdraw
+-> State: 2.3 <-
+      balance = 1
+      accumulated_amount = 2
+      status = min
+-> Input: 2.4 <-
+      action = update
+-> State: 2.4 <-
+      balance = -1
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.5 <-
+      action = deposit
+-> State: 2.5 <-
+      balance = -1
+      accumulated_amount = 1
+      status = pls
+-> Input: 2.6 <-
+      action = update
+-> State: 2.6 <-
+      balance = 0
+      accumulated_amount = 0
+      status = idle
+-> Input: 2.7 <-
+      action = deposit
+-> State: 2.7 <-
+      balance = 0
+      accumulated_amount = 1
+      status = pls
+-> Input: 2.8 <-
+      action = update
+-> State: 2.8 <-
+      balance = 1
+      accumulated_amount = 0
+      status = idle
+```
+</details>
+
+<!--##############################################################################################-->
+
+
+
+<details>
+  <summary><b>First Model used in the paper</b></summary>
   
  ```javascript
 MODULE main
