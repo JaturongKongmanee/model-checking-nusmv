@@ -40,6 +40,12 @@ NuSMV is a **symbolic model checking**, but also support **bounded model checkin
 ### Approach
 * NuSMV supports both **binary decision diagrams(BDDs)** and **SAT** approaches.
 
+### Useful sentences
+* The main purpose of a model checker is to verify that a model satisfies a set of desired properties specified by the user. CTL and LTL specifications are evaluated
+by NUSMV in order to determine their truth or falsity in the FSM. When a specification
+is discovered to be false, NUSMV constructs and prints a counterexample, i.e. a trace
+of the FSM that falsifies the property
+
 
 
 ## Getting Started
@@ -3012,3 +3018,4 @@ Trace Type: Simulation
 * http://www.tcs.hut.fi/Studies/T-79.5001/reports/laht08simcex.pdf
 * [Bounded Model Checking](http://www.cs.cmu.edu/~emc/papers/Books%20and%20Edited%20Volumes/Bounded%20Model%20Checking.pdf)
 * [Symbolic Model Checking without BDDs*](https://link.springer.com/content/pdf/10.1007/3-540-49059-0_14.pdf)
+* [Simplification of NuSMV Model Checking Counter Examples](http://www.tcs.hut.fi/Studies/T-79.5001/reports/laht08simcex.pdf)
